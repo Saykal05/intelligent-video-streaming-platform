@@ -1,4 +1,5 @@
 import cv2
+import os
 
 def main():
     # Paths to video files
