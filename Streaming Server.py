@@ -2,6 +2,7 @@ import cv2
 import torch
 import subprocess
 import threading
+import os
 
 # ffmpeg.exe tam yolu
 ffmpeg_path = r"C:\Users\emins\Downloads\ffmpeg-2025-05-19-git-c55d65ac0a-full_build\ffmpeg-2025-05-19-git-c55d65ac0a-full_build\bin\ffmpeg.exe"
@@ -10,11 +11,14 @@ ffmpeg_path = r"C:\Users\emins\Downloads\ffmpeg-2025-05-19-git-c55d65ac0a-full_b
 model = torch.hub.load('ultralytics/yolov5', 'yolov5s', trust_repo=True)
 model.conf = 0.4  # Confidence threshold
 
-# Video kaynakları (kamera + iki video dosyası)
+
+
+base_dir = os.path.dirname(os.path.abspath(__file__))
+
 sources = [
     0,
-    r"C:\Users\emins\Desktop\Multimedia Systems Project\video1.mp4",
-    r"C:\Users\emins\Desktop\Multimedia Systems Project\video2.mp4"
+    os.path.join(base_dir, 'videos', 'video1.mp4'),
+    os.path.join(base_dir, 'videos', 'video2.mp4')
 ]
 
 # UDP portları, raw ve annotated video için
