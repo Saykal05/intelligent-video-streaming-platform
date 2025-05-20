@@ -6,8 +6,8 @@ model = torch.hub.load('ultralytics/yolov5', 'yolov5s', trust_repo=True)
 model.conf = 0.4  # Minimum confidence threshold
 
 # Video paths
-video1_path = r"C:\Users\emins\Desktop\Multimedia Systems Project\video1.mp4"
-video2_path = r"C:\Users\emins\Desktop\Multimedia Systems Project\video2.mp4"
+video1_path = os.path.join(base_dir, 'videos', 'video1.mp4')
+video2_path = os.path.join(base_dir, 'videos', 'video2.mp4')
 
 # Capture sources
 cap1 = cv2.VideoCapture(video1_path)
