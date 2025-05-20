@@ -1,4 +1,4 @@
-# main.py (Entegre Ana Sistem)
+
 import cv2
 import os
 import torch
@@ -10,7 +10,7 @@ from typing import Optional, Dict
 import uvicorn
 from contextlib import asynccontextmanager
 
-# ------------------- Konfigürasyon -------------------
+
 
 FFMPEG_PATH = r"C:\ffmpeg\bin\ffmpeg.exe"  # FFmpeg yolu
 
@@ -35,7 +35,6 @@ PORT_BASE = 5000  # Temel port numarası
 
 
 
-# ------------------- Sistem Durumu -------------------
 class SystemState:
     def __init__(self):
         self.active_streams: Dict[int, dict] = {}
@@ -51,7 +50,7 @@ class SystemState:
         }
 
 
-# ------------------- FastAPI Başlatıcı -------------------
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Model ve sistem kaynaklarını yükle
@@ -73,12 +72,12 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
-# ------------------- Video İşleme Çekirdeği -------------------
+-
 def video_processor(stream_id: int):
     system = app.state.system
     source = SOURCES[stream_id]
 
-    # Video yakalayıcıyı başlat
+
     try:
         cap = cv2.VideoCapture(source['input'])
         if not cap.isOpened():
@@ -88,7 +87,7 @@ def video_processor(stream_id: int):
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         fps = cap.get(cv2.CAP_PROP_FPS) or 30
 
-        # FFmpeg encoder'ı başlat
+       
         ffmpeg_cmd = [
             FFMPEG_PATH,
             '-y',
@@ -114,11 +113,11 @@ def video_processor(stream_id: int):
                     cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
                 continue
 
-            # Nesne tespiti ve analiz
+           
             results = system.analytics_model(frame)
             detections = results.xyxy[0]
 
-            # Görsel işaretleme
+         
             detection_count = 0
             for *box, conf, cls in detections:
                 x1, y1, x2, y2 = map(int, box)
@@ -129,11 +128,11 @@ def video_processor(stream_id: int):
                             cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
                 detection_count += 1
 
-            # Metrikleri güncelle
+     
             system.analytics_metrics['total_detections'] += detection_count
             system.analytics_metrics['last_processed'] = str(datetime.now())
 
-            # Stream'e veri gönder
+      
             try:
                 encoder.stdin.write(frame.tobytes())
             except BrokenPipeError:
@@ -148,7 +147,7 @@ def video_processor(stream_id: int):
             encoder.terminate()
 
 
-# ------------------- API Endpoint'leri -------------------
+-
 class StreamControl(BaseModel):
     resolution: Optional[str] = None
     framerate: Optional[int] = None
@@ -210,6 +209,5 @@ def system_status():
     }
 
 
-# ------------------- Çalıştırma -------------------
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
