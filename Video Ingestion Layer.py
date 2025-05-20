@@ -2,8 +2,8 @@ import cv2
 
 def main():
     # Paths to video files
-    video1_path = r"C:\Users\emins\Desktop\Multimedia Systems Project\video1.mp4"
-    video2_path = r"C:\Users\emins\Desktop\Multimedia Systems Project\video2.mp4"
+        video1_path = os.path.join(base_dir, 'videos', 'video1.mp4')
+        video2_path = os.path.join(base_dir, 'videos', 'video2.mp4')
 
     # Open sources
     cap1 = cv2.VideoCapture(video1_path)  # Video 1
