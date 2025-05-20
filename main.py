@@ -1,5 +1,6 @@
 # main.py (Entegre Ana Sistem)
 import cv2
+import os
 import torch
 import subprocess
 import threading
@@ -10,22 +11,28 @@ import uvicorn
 from contextlib import asynccontextmanager
 
 # ------------------- Konfigürasyon -------------------
+
 FFMPEG_PATH = r"C:\ffmpeg\bin\ffmpeg.exe"  # FFmpeg yolu
+
+base_dir = os.path.dirname(os.path.abspath(__file__))
+
 SOURCES = [
     {
         'input': 0,
         'name': 'Webcam'
     },
     {
-        'input': r"C:\Users\emins\Desktop\Multimedia Systems Project\video1.mp4",
+        'input': os.path.join(base_dir, 'videos', 'video1.mp4'),
         'name': 'Video 1'
     },
     {
-        'input': r"C:\Users\emins\Desktop\Multimedia Systems Project\video2.mp4",
+        'input': os.path.join(base_dir, 'videos', 'video2.mp4'),
         'name': 'Video 2'
     }
 ]
+
 PORT_BASE = 5000  # Temel port numarası
+
 
 
 # ------------------- Sistem Durumu -------------------
